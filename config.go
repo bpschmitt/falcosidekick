@@ -75,6 +75,12 @@ func getConfig() *types.Configuration {
 	v.SetDefault("Datadog.MutualTLS", false)
 	v.SetDefault("Datadog.CheckCert", true)
 
+	v.SetDefault("Newrelic.AccountID", "")
+	v.SetDefault("Newrelic.Host", "https://insights-collector.newrelic.com")
+	v.SetDefault("Newrelic.LicenseKey", "")
+	v.SetDefault("Newrelic.MutualTLS", false)
+	v.SetDefault("Newrelic.CheckCert", true)
+
 	v.SetDefault("Discord.WebhookURL", "")
 	v.SetDefault("Discord.MinimumPriority", "")
 	v.SetDefault("Discord.Icon", "https://raw.githubusercontent.com/falcosecurity/falcosidekick/master/imgs/falcosidekick_color.png")

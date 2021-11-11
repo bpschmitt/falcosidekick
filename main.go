@@ -50,6 +50,7 @@ var (
 	grafanaClient       *outputs.Client
 	yandexClient        *outputs.Client
 	syslogClient        *outputs.Client
+	newrelicClient      *outputs.Client
 
 	statsdClient, dogstatsdClient *statsd.Client
 	config                        *types.Configuration
@@ -140,6 +141,17 @@ func init() {
 			config.Datadog.APIKey = ""
 		} else {
 			outputs.EnabledOutputs = append(outputs.EnabledOutputs, "Datadog")
+		}
+	}
+
+	if config.Newrelic.AccountID != "" {
+		var err error
+		newrelicClient, err = outputs.NewClient("Newrelic", config.Newrelic.Host+outputs.NewRelicPath+"/"+config.Newrelic.AccountID+"/events", config.Newrelic.MutualTLS, config.Datadog.CheckCert, config, stats, promStats, statsdClient, dogstatsdClient)
+		log.Printf(config.Newrelic.Host + "/" + outputs.NewRelicPath + config.Newrelic.AccountID + "/events")
+		if err != nil {
+			config.Newrelic.LicenseKey = ""
+		} else {
+			outputs.EnabledOutputs = append(outputs.EnabledOutputs, "Newrelic")
 		}
 	}
 

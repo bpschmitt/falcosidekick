@@ -30,6 +30,7 @@ type Configuration struct {
 	Rocketchat         RocketchatOutputConfig
 	Teams              teamsOutputConfig
 	Datadog            datadogOutputConfig
+	Newrelic           newrelicOutputConfig
 	Discord            DiscordOutputConfig
 	Alertmanager       alertmanagerOutputConfig
 	Elasticsearch      elasticsearchOutputConfig
@@ -126,6 +127,15 @@ type teamsOutputConfig struct {
 type datadogOutputConfig struct {
 	APIKey          string
 	Host            string
+	MinimumPriority string
+	CheckCert       bool
+	MutualTLS       bool
+}
+
+type newrelicOutputConfig struct {
+	LicenseKey      string
+	Host            string
+	AccountID       string
 	MinimumPriority string
 	CheckCert       bool
 	MutualTLS       bool
@@ -432,6 +442,7 @@ type Statistics struct {
 	Rocketchat        *expvar.Map
 	Teams             *expvar.Map
 	Datadog           *expvar.Map
+	Newrelic          *expvar.Map
 	Discord           *expvar.Map
 	Alertmanager      *expvar.Map
 	Elasticsearch     *expvar.Map
