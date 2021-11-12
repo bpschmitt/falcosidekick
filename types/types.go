@@ -133,9 +133,9 @@ type datadogOutputConfig struct {
 }
 
 type newrelicOutputConfig struct {
+	AccountID       string
 	LicenseKey      string
 	Host            string
-	AccountID       string
 	MinimumPriority string
 	CheckCert       bool
 	MutualTLS       bool

@@ -49,9 +49,12 @@ datadog:
   # minimumpriority: "" # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|notice|informational|debug or "" (default)
 
 newrelic:
-  #accountid:
-  #licensekey:
-  #host:
+  # accountid:
+  # licensekey:
+  # host:
+  # minimumpriority: "" # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|
+  # mutualtls: false # if true, checkcert flag will be ignored (server cert will always be checked)
+  # checkcert: true # check if ssl certificate of the output is valid (default: true)
 
 alertmanager:
   # hostport: "" # http://{domain or ip}:{port}, if not empty, Alertmanager output is enabled

@@ -137,6 +137,10 @@ func forwardEvent(falcopayload types.FalcoPayload) {
 		go datadogClient.DatadogPost(falcopayload)
 	}
 
+	if config.Newrelic.AccountID != "" && (falcopayload.Priority >= types.Priority(config.Newrelic.MinimumPriority) || falcopayload.Rule == testRule) {
+		go newrelicClient.NewrelicPost(falcopayload)
+	}
+
 	if config.Discord.WebhookURL != "" && (falcopayload.Priority >= types.Priority(config.Discord.MinimumPriority) || falcopayload.Rule == testRule) {
 		go discordClient.DiscordPost(falcopayload)
 	}

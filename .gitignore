@@ -21,3 +21,4 @@ falcosidekick
 
 tmp/
 dist/
+*values.yaml

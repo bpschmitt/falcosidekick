@@ -356,6 +356,7 @@ func getConfig() *types.Configuration {
 	c.Mattermost.MinimumPriority = checkPriority(c.Mattermost.MinimumPriority)
 	c.Teams.MinimumPriority = checkPriority(c.Teams.MinimumPriority)
 	c.Datadog.MinimumPriority = checkPriority(c.Datadog.MinimumPriority)
+	c.Newrelic.MinimumPriority = checkPriority(c.Newrelic.MinimumPriority)
 	c.Alertmanager.MinimumPriority = checkPriority(c.Alertmanager.MinimumPriority)
 	c.Elasticsearch.MinimumPriority = checkPriority(c.Elasticsearch.MinimumPriority)
 	c.Influxdb.MinimumPriority = checkPriority(c.Influxdb.MinimumPriority)

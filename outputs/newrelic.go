@@ -63,7 +63,7 @@ func (c *Client) NewrelicPost(falcopayload types.FalcoPayload) {
 	err := c.Post(newNewRelicPayload(falcopayload))
 	if err != nil {
 		go c.CountMetric(Outputs, 1, []string{"output:newrelic", "status:error"})
-		//c.Stats.Newrelic.Add(Error, 1)
+		c.Stats.Newrelic.Add(Error, 1)
 		c.PromStats.Outputs.With(map[string]string{"destination": "newrelic", "status": Error}).Inc()
 		log.Printf("[ERROR] : New Relic - %v\n", err)
 		return
