@@ -1,0 +1,33 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:    
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image
+      run: docker build . --file ./Dockerfile --tag bpschmitt/falcosidekick:${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push to DockerHub
+      run: docker push bpschmitt/falcosidekick:${{ secrets.MAJOR }}.${{ secrets.MINOR }}
+
+    - name: Update Minor version
+      uses: hmanzur/actions-set-secret@v2.0.0
+      with:
+        name: 'MINOR'
+        value: $((${{ secrets.MINOR }}+1))
+        repository: bpschmitt/falcosidekick
+        token: ${{ secrets.REPO_ACCESS_TOKEN }}
