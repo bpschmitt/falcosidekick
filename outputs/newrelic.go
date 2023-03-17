@@ -39,9 +39,8 @@ func parseK8sAttributes(src string) map[string]string {
 		k := kv[1]
 		v := kv[2]
 		res[k] = v
-		log.Println(res)
 	}
-
+	log.Println("k8s.pod: " + res[`k8s.pod`])
 	return res
 }
 
