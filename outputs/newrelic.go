@@ -30,7 +30,7 @@ type newRelicPayload struct {
 
 // Parse K8s attributes
 func parseK8sAttributes(src string) map[string]string {
-	log.Println("parseK8sAttributes: " + src)
+	//log.Println("parseK8sAttributes: " + src)
 	var rex = regexp.MustCompile("([A-Za-z0-9\\-\\_\\.]+)=([A-Za-z0-9\\-\\_]+)")
 	data := rex.FindAllStringSubmatch(src, -1)
 
@@ -40,7 +40,7 @@ func parseK8sAttributes(src string) map[string]string {
 		v := kv[2]
 		res[k] = v
 	}
-	log.Println("k8s.pod: " + res[`k8s.pod`])
+	//log.Println("k8s.pod: " + res[`k8s.pod`])
 	return res
 }
 
@@ -54,13 +54,13 @@ func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 	log.Println("Text: " + falcopayload.Output)
 
 	d.K8sPod = tags[`k8s.pod`]
+	d.K8sNamespace = tags[`k8s.ns`]
+	d.K8sContainer = tags[`container`]
+	d.K8sContainerId = tags[`container_id`]
 
-	//d.Tags = tags
-	//d.K8sPod = tags[0]
 	d.Title = falcopayload.Rule
 	d.Text = falcopayload.Output
 
-	//log.Printf(d.Text)
 	d.SourceType = "falco"
 
 	var status string
