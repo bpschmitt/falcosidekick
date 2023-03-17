@@ -50,12 +50,12 @@ func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 
 	tags = parseK8sAttributes(falcopayload.Output)
 
-	log.Println(tags)
-	log.Println("Text: " + falcopayload.Output)
+	//log.Println(tags)
+	//log.Println("Text: " + falcopayload.Output)
 
 	d.K8sPod = tags[`k8s.pod`]
 	d.K8sNamespace = tags[`k8s.ns`]
-	d.K8sContainer = tags[`container`]
+	d.K8sContainerImage = tags[`image`]
 	d.K8sContainerId = tags[`container_id`]
 
 	d.Title = falcopayload.Rule
