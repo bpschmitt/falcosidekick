@@ -27,6 +27,7 @@ func getInitStats() *types.Statistics {
 		Mattermost:        getOutputNewMap("mattermost"),
 		Teams:             getOutputNewMap("teams"),
 		Datadog:           getOutputNewMap("datadog"),
+		Newrelic:          getOutputNewMap("newrelic"),
 		Discord:           getOutputNewMap("discord"),
 		Alertmanager:      getOutputNewMap("alertmanager"),
 		Elasticsearch:     getOutputNewMap("elasticsearch"),

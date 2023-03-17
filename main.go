@@ -147,7 +147,7 @@ func init() {
 	if config.Newrelic.AccountID != "" {
 		var err error
 		newrelicClient, err = outputs.NewClient("Newrelic", config.Newrelic.Host+outputs.NewRelicPath+"/"+config.Newrelic.AccountID+"/events", config.Newrelic.MutualTLS, config.Newrelic.CheckCert, config, stats, promStats, statsdClient, dogstatsdClient)
-		log.Printf("[INFO] : New Relic Endpoint: " + config.Newrelic.Host + outputs.NewRelicPath + "/" + config.Newrelic.AccountID + "/events")
+		log.Printf("[INFO]  : New Relic Endpoint: " + config.Newrelic.Host + outputs.NewRelicPath + "/" + config.Newrelic.AccountID + "/events")
 		if err != nil {
 			log.Printf("[ERROR] : " + err.Error())
 			config.Newrelic.AccountID = ""

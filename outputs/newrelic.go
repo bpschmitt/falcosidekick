@@ -1,41 +1,67 @@
 package outputs
 
 import (
+	"encoding/json"
 	"log"
+	"regexp"
 
 	"github.com/falcosecurity/falcosidekick/types"
+	"github.com/jeremywohl/flatten"
 )
 
 const (
-	// NewRelicPath is the path of New Relic's event API
+	// NewRelicPath is the path of New Relic's Event API
 	NewRelicPath string = "/v1/accounts"
 )
 
 type newRelicPayload struct {
-	EventType  string   `json:"eventType,omitempty"`
-	Title      string   `json:"title,omitempty"`
-	Text       string   `json:"text,omitempty"`
-	AlertType  string   `json:"alert_type,omitempty"`
-	SourceType string   `json:"source_type_name,omitempty"`
-	Tags       []string `json:"tags,omitempty"`
+	EventType         string   `json:"eventType,omitempty"`
+	Title             string   `json:"title,omitempty"`
+	Text              string   `json:"text,omitempty"`
+	AlertType         string   `json:"alertType,omitempty"`
+	SourceType        string   `json:"sourceType,omitempty"`
+	Tags              []string `json:"tags,omitempty"`
+	K8sPod            string   `json:"podName,omitempty"`
+	K8sContainer      string   `json:"containerName,omitempty"`
+	K8sContainerImage string   `json:"containerImage,omitempty"`
+	K8sContainerId    string   `json:"containerId,omitempty"`
+	K8sNamespace      string   `json:"namespaceName,omitempty"`
+}
+
+// Parse K8s attributes
+func parseK8sAttributes(src string) map[string]string {
+	log.Println("parseK8sAttributes: " + src)
+	var rex = regexp.MustCompile("([A-Za-z0-9\\-\\_\\.]+)=([A-Za-z0-9\\-\\_]+)")
+	data := rex.FindAllStringSubmatch(src, -1)
+
+	res := make(map[string]string)
+	for _, kv := range data {
+		k := kv[1]
+		v := kv[2]
+		res[k] = v
+		log.Println(res)
+	}
+
+	return res
 }
 
 func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 	var d newRelicPayload
-	var tags []string
+	var tags map[string]string
 
-	for i, j := range falcopayload.OutputFields {
-		switch v := j.(type) {
-		case string:
-			tags = append(tags, i+":"+v)
-		default:
-			continue
-		}
-	}
-	d.Tags = tags
+	tags = parseK8sAttributes(falcopayload.Output)
 
+	log.Println(tags)
+	log.Println("Text: " + falcopayload.Output)
+
+	d.K8sPod = tags[`k8s.pod`]
+
+	//d.Tags = tags
+	//d.K8sPod = tags[0]
 	d.Title = falcopayload.Rule
 	d.Text = falcopayload.Output
+
+	//log.Printf(d.Text)
 	d.SourceType = "falco"
 
 	var status string
@@ -55,12 +81,22 @@ func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 
 // NewrelicPost posts event to New Relic
 func (c *Client) NewrelicPost(falcopayload types.FalcoPayload) {
-	//c.Stats.Newrelic.Add(Total, 1)
+	c.Stats.Newrelic.Add(Total, 1)
 	c.AddHeader("Api-Key", c.Config.Newrelic.LicenseKey)
 	c.AddHeader("Content-Type", "application/json")
 	//c.AddHeader("Content-Encoding", "gzip")
 
-	err := c.Post(newNewRelicPayload(falcopayload))
+	var p newRelicPayload
+	var res newRelicPayload
+
+	p = newNewRelicPayload(falcopayload)
+	pflat, err := json.Marshal(p)
+	flat, err := flatten.FlattenString(string(pflat), "", flatten.UnderscoreStyle)
+	json.Unmarshal([]byte(flat), &res)
+
+	//log.Printf(string(flat))
+
+	err = c.Post(res)
 	if err != nil {
 		go c.CountMetric(Outputs, 1, []string{"output:newrelic", "status:error"})
 		c.Stats.Newrelic.Add(Error, 1)
@@ -70,6 +106,6 @@ func (c *Client) NewrelicPost(falcopayload types.FalcoPayload) {
 	}
 
 	go c.CountMetric(Outputs, 1, []string{"output:newrelic", "status:ok"})
-	//c.Stats.Newrelic.Add(OK, 1)
+	c.Stats.Newrelic.Add(OK, 1)
 	c.PromStats.Outputs.With(map[string]string{"destination": "newrelic", "status": OK}).Inc()
 }
