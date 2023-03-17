@@ -154,7 +154,7 @@ func init() {
 			config.Newrelic.LicenseKey = ""
 			config.Newrelic.Host = ""
 		} else {
-			outputs.EnabledOutputs = append(outputs.EnabledOutputs, "Newrelic")
+			outputs.EnabledOutputs = append(outputs.EnabledOutputs, "NewRelic")
 		}
 	}
 
