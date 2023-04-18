@@ -31,7 +31,7 @@ type newRelicPayload struct {
 // Parse K8s attributes
 func parseK8sAttributes(src string) map[string]string {
 	//log.Println("parseK8sAttributes: " + src)
-	var rex = regexp.MustCompile("([A-Za-z0-9\\-\\_\\.]+)=([A-Za-z0-9\\-\\_/]+)")
+	var rex = regexp.MustCompile("([A-Za-z0-9\\-\\_\\.]+)=([A-Za-z0-9\\-\\_/\\.]+)")
 	data := rex.FindAllStringSubmatch(src, -1)
 
 	res := make(map[string]string)
@@ -40,6 +40,8 @@ func parseK8sAttributes(src string) map[string]string {
 		v := kv[2]
 		res[k] = v
 	}
+
+	log.Println("image: " + res[`image`])
 	//log.Println("k8s.pod: " + res[`k8s.pod`])
 	return res
 }
