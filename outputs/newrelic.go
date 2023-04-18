@@ -41,7 +41,7 @@ func parseK8sAttributes(src string) map[string]string {
 		res[k] = v
 	}
 
-	log.Println("image: " + res[`image`])
+	//log.Println("image: " + res[`image`])
 	//log.Println("k8s.pod: " + res[`k8s.pod`])
 	return res
 }
@@ -55,7 +55,7 @@ func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 	//log.Println(tags)
 	//log.Println("Text: " + falcopayload.Output)
 
-	log.Println(tags[`image`])
+	//log.Println(tags[`image`])
 
 	d.K8sPod = tags[`k8s.pod`]
 	d.K8sNamespace = tags[`k8s.ns`]
