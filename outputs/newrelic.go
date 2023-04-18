@@ -53,6 +53,8 @@ func newNewRelicPayload(falcopayload types.FalcoPayload) newRelicPayload {
 	//log.Println(tags)
 	//log.Println("Text: " + falcopayload.Output)
 
+	log.Println(tags[`image`])
+
 	d.K8sPod = tags[`k8s.pod`]
 	d.K8sNamespace = tags[`k8s.ns`]
 	d.K8sContainerImage = tags[`image`]
